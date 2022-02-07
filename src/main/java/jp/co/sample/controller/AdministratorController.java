@@ -29,17 +29,18 @@ public class AdministratorController {
 	
 	//ログイン画面
 	@RequestMapping("/login")
-	public String login(LoginForm form,Model model) {
-		Administrator result= administratorService.login(form.getMailAddress(), form.getPassword());
-		if(result==null) {
-			model.addAttribute("form", "メールアドレスまたはパスワードが不正です。");
-			return "/login";
+	public String login(LoginForm loginform,Model model) {
+		Administrator administrator= administratorService.login(loginform.getMailAddress(), loginform.getPassword());
+		
+		if(administrator==null) {
+			model.addAttribute("message", "メールアドレスまたはパスワードが不正です。");
+			return "administrator/login";
+		}else {
+			session.setAttribute("administratorName",administrator.getName());
+			return "forward:/employee/showList";
 		}
-		session.setAttribute("administratorName", "管理者");
-		 return "forward:/employee/list";
 	}
 	
-	//ログイン画面リダイレクト
 	@RequestMapping("/")
 	public String toLogin() {
 		return "/administrator/login";
