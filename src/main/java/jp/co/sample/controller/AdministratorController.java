@@ -14,21 +14,27 @@ import jp.co.sample.form.InsertAdministratorForm;
 import jp.co.sample.form.LoginForm;
 import jp.co.sample.service.AdministratorService;
 
+
+
 @Controller
 @RequestMapping("/")
 public class AdministratorController {
 	
 	@Autowired
 	private AdministratorService administratorService;
-	@Autowired
-	private HttpSession session;
 	
 	@ModelAttribute
 	public LoginForm setUpLoginForm() {
 		return new LoginForm();
 	}
 	
-	//ログイン画面
+	
+	/**
+	 * @param loginform
+	 * @param model
+	 * @return　ログイン成功でemployee/showListへフォワード
+	 * @return　失敗時はadministrator/loginへフォワード
+	 */
 	@RequestMapping("/login")
 	public String login(LoginForm loginform,Model model) {
 		Administrator administrator= administratorService.login(loginform.getMailAddress(), loginform.getPassword());
@@ -49,11 +55,19 @@ public class AdministratorController {
 	
 	
 	
+	/**
+	 * @return　
+	 */
 	@ModelAttribute
 	public InsertAdministratorForm setUpInsertAdministratorForm() {
 		return new InsertAdministratorForm();	
 	}
-	//登録画面
+	
+	
+	/**
+	 * @param form
+	 * @return　/toInsertへリダイレクト
+	 */
 	@RequestMapping("/insert")
 	public String insert(InsertAdministratorForm form) {
 		Administrator administrator = new Administrator();
@@ -62,12 +76,25 @@ public class AdministratorController {
 		administratorService.insert(administrator);
 		return "toInsert";	
 	}
-	//登録画面リダイレクト
+	
+	
+	 //登録画面リダイレクト表示
 	@RequestMapping("/toInsert")
 	public String toInsert() {
 		return "/administrator/insert";
 	}
 	
+	
+	/**
+	 * sessionスコープ準備
+	 */
+	@Autowired
+	private HttpSession session;
+	
+	
+	/**
+	 * @return ログアウト画面へリダイレクト
+	 */
 	@RequestMapping("/logout")
  	public String logout() {
 		session.invalidate();

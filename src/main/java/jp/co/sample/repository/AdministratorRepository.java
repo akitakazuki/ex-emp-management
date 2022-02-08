@@ -28,6 +28,10 @@ public class AdministratorRepository {
 	private NamedParameterJdbcTemplate template;
 
 	
+	/**
+	 * 渡した登録情報を保存する
+	 * @param administrator　登録情報
+	 */
 	public void insert (Administrator administrator) {
 		SqlParameterSource param = new BeanPropertySqlParameterSource(administrator);
 		String insertSql= "insert into administrators (name,mail_address,password)"
@@ -35,6 +39,13 @@ public class AdministratorRepository {
 		template.update(insertSql,param);
 	}
 	
+	
+	/**
+	 * メールアドレスとパスワードで検索を行う
+	 * @param mailAddress
+	 * @param password
+	 * @return　検索された登録情報
+	 */
 	public Administrator findByMailAddressAndPassword(String mailAddress,String password) {
 		
 		String sql = "select * from administrators "

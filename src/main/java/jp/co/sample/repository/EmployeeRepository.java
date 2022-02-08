@@ -37,12 +37,20 @@ public class EmployeeRepository {
 	@Autowired
 	private NamedParameterJdbcTemplate template;
 
+	/**
+	 * @return　全従業員リスト
+	 */
 	public List<Employee>findAll(){
 		String sql = "select * from employees order by hire_date asc";
 		List<Employee> employeeList= template.query(sql,EMPLOYEE_ROW_MAPPER);
 		return employeeList;
 	}
 	
+	/**
+	 * 主キー検索を行う
+	 * @param id
+	 * @return　検索された従業員情報
+	 */
 	public Employee load(Integer id) {
 		String sql = "select * from employees where id=:id";
 		
@@ -51,6 +59,10 @@ public class EmployeeRepository {
 		return employee;
 	}
 	
+	/**
+	 * 渡した登録情報を更新する
+	 * @param employee　従業員情報
+	 */
 	public void update(Employee employee) {
 		SqlParameterSource param = new BeanPropertySqlParameterSource(employee);
 		String updatesql = "update employees set name=:name,image=:image,"
