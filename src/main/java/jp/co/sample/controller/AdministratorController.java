@@ -58,6 +58,7 @@ public class AdministratorController {
 	public String insert(InsertAdministratorForm form) {
 		Administrator administrator = new Administrator();
 		BeanUtils.copyProperties(form, administrator);
+		administrator.setName(form.getName());
 		administratorService.insert(administrator);
 		return "toInsert";	
 	}
@@ -65,6 +66,11 @@ public class AdministratorController {
 	@RequestMapping("/toInsert")
 	public String toInsert() {
 		return "/administrator/insert";
-		
 	}
+	
+	@RequestMapping("/logout")
+ 	public String logout() {
+		session.invalidate();
+		return "redirect:/";
+ 	}
 }
