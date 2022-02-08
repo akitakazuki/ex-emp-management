@@ -20,6 +20,7 @@ public class AdministratorController {
 	
 	@Autowired
 	private AdministratorService administratorService;
+	@Autowired
 	private HttpSession session;
 	
 	@ModelAttribute

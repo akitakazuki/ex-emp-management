@@ -16,6 +16,7 @@ import jp.co.sample.service.EmployeeService;
 @Controller
 @RequestMapping("/employee")
 public class EmployeeController {
+	
 	@Autowired
  	private EmployeeService service;
 
@@ -39,6 +40,16 @@ public class EmployeeController {
 		model.addAttribute("employee",employee);
 		return "employee/detail.html";
  		
+ 	}
+ 	
+ 	@RequestMapping("/update")
+ 	public String update(UpdateEmployeeForm form) {
+ 		Employee employee = service.showDetail(form.getIntId());
+ 		
+ 		employee.setDependentsCount(form.getIntDentsCount());
+ 		
+ 		service.update(employee);
+ 		return "redirect:/employee/showList";
  	}
  	
  }
