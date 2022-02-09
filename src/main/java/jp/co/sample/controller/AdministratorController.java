@@ -6,6 +6,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -36,13 +38,17 @@ public class AdministratorController {
 	 * @return　失敗時はadministrator/loginへフォワード
 	 */
 	@RequestMapping("/login")
-	public String login(LoginForm loginform,Model model) {
+	public String login(@Validated LoginForm loginform,BindingResult result,Model model) {
 		Administrator administrator= administratorService.login(loginform.getMailAddress(), loginform.getPassword());
 		
-		if(administrator==null) {
+		if (result.hasErrors() || administrator==null) {
 			model.addAttribute("message", "メールアドレスまたはパスワードが不正です。");
-			return "administrator/login";
+			return  "administrator/login";
 		}
+//		if(administrator==null) {
+//			model.addAttribute("message", "メールアドレスまたはパスワードが不正です。");
+//			return "administrator/login";
+//		}
 			session.setAttribute("administratorName",administrator.getName());
 			return "forward:employee/showList";
 		
@@ -66,21 +72,25 @@ public class AdministratorController {
 	
 	/**
 	 * @param form
-	 * @return　/toInsertへリダイレクト
+	 * @return　/
 	 */
 	@RequestMapping("/insert")
-	public String insert(InsertAdministratorForm form) {
+	public String insert(@Validated InsertAdministratorForm form,BindingResult result) {
+		
+		if(result.hasErrors()) {
+			return"administrator/insert";
+		}
 		Administrator administrator = new Administrator();
 		BeanUtils.copyProperties(form, administrator);
 		administrator.setName(form.getName());
 		administratorService.insert(administrator);
-		return "toInsert";	
+		return "redirect:/";	
 	}
 	
 	
-	 //登録画面リダイレクト表示
+	 //登録フォームへ
 	@RequestMapping("/toInsert")
-	public String toInsert() {
+	public String toInsert(Model model) {
 		return "/administrator/insert";
 	}
 	
