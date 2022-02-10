@@ -1,11 +1,13 @@
 package jp.co.sample.form;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 public class InsertAdministratorForm {
 	@NotBlank(message="氏名を入力してください")
 	private String name;
+	@Email(message="メールアドレスの形式が異なります")
 	@Size(min=1,max=127,message="メールアドレスを入力してください")
 	private String mailAddress;
 	@Size(min=4,max=16,message="パスワードを入力してください")
